@@ -3,9 +3,9 @@ package com.example.fitx
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.imageview.ShapeableImageView
 
 class PostAdapter(private val postList: List<PostModel>) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
@@ -13,12 +13,14 @@ class PostAdapter(private val postList: List<PostModel>) : RecyclerView.Adapter<
         val tvName: TextView = view.findViewById(R.id.tvUserName)
         val tvTime: TextView = view.findViewById(R.id.tvPostTime)
         val tvContent: TextView = view.findViewById(R.id.tvPostContent)
-        val imgAvatar: ShapeableImageView = view.findViewById(R.id.imgUserAvatar)
-        val imgPost: ShapeableImageView = view.findViewById(R.id.imgPostImage)
+        val imgAvatar: ImageView = view.findViewById(R.id.imgUserAvatar)
+        val imgPost: ImageView = view.findViewById(R.id.imgPostImage)
+        val tvLikes: TextView = view.findViewById(R.id.tvLikes)       // Added
+        val tvComments: TextView = view.findViewById(R.id.tvComments) // Added
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        // This uses your 'item_community_post' design
+        // Connects to item_community_post.xml
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_community_post, parent, false)
         return PostViewHolder(view)
@@ -32,7 +34,10 @@ class PostAdapter(private val postList: List<PostModel>) : RecyclerView.Adapter<
         holder.tvContent.text = post.content
         holder.imgAvatar.setImageResource(post.avatarRes)
 
-        // Logic: Only show the big post image if one was provided
+        holder.tvLikes.text = "${post.likes} Likes"
+        holder.tvComments.text = "${post.comments} Comments"
+
+        // Logic: Only show the big post image if one exists
         if (post.postImageRes != null) {
             holder.imgPost.visibility = View.VISIBLE
             holder.imgPost.setImageResource(post.postImageRes)

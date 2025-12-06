@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -52,11 +51,11 @@
         android:textColor="#B4F656"
         android:textSize="18sp"
         android:textStyle="bold"
+        tools:text="16-20%"
         app:layout_constraintBottom_toBottomOf="@id/body_fat_label"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/body_fat_label"
-        app:layout_constraintTop_toTopOf="@id/body_fat_label"
-        tools:text="16-20%" />
+        app:layout_constraintTop_toTopOf="@id/body_fat_label" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/body_type_slider"
@@ -68,15 +67,15 @@
         android:value="0.0"
         android:valueFrom="0.0"
         android:valueTo="4.0"
-        app:thumbColor="#B4F656"
-        app:trackColorActive="#B4F656"
-        app:trackColorInactive="#333333"
         app:haloColor="#33B4F656"
-        app:tickColorActive="#000000"
-        app:tickColorInactive="#888888"
         app:layout_constraintBottom_toTopOf="@id/slider_start_label"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:thumbColor="#B4F656"
+        app:tickColorActive="#000000"
+        app:tickColorInactive="#888888"
+        app:trackColorActive="#B4F656"
+        app:trackColorInactive="#333333" />
 
     <TextView
         android:id="@+id/slider_start_label"
@@ -104,13 +103,13 @@
         android:layout_marginHorizontal="24dp"
         android:layout_marginBottom="24dp"
         app:cardBackgroundColor="#1C1C1E"
-        app:strokeColor="#333333"
-        app:strokeWidth="1dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@id/back_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="#333333"
+        app:strokeWidth="1dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -122,11 +121,11 @@
                 android:id="@+id/body_quote_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Motivational Quote"
+                android:gravity="center"
+                tools:text="Motivational Quote goes here"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
-                android:textStyle="italic"
-                android:gravity="center" />
+                android:textStyle="italic" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

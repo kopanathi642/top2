@@ -14,11 +14,17 @@ class MotivationsActivity : AppCompatActivity() {
 
     private val selectedMotivations = mutableSetOf<String>()
 
+    // Variable to hold the gender
+    private var userGender: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Correct layout name
         setContentView(R.layout.activity_motivations)
+
+        // 1. Retrieve Gender from previous activity (MetricsInputActivity)
+        userGender = intent.getStringExtra("USER_GENDER")
 
         // Initialize Cards
         val cardConfident = findViewById<MaterialCardView>(R.id.cardConfident)
@@ -52,6 +58,10 @@ class MotivationsActivity : AppCompatActivity() {
             } else {
                 val intent = Intent(this, FitnessLevelActivity::class.java)
                 intent.putStringArrayListExtra("MOTIVATIONS", ArrayList(selectedMotivations))
+
+                // 2. Pass Gender to the next activity
+                intent.putExtra("USER_GENDER", userGender)
+
                 startActivity(intent)
             }
         }

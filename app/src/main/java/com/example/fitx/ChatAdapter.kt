@@ -4,62 +4,68 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.imageview.ShapeableImageView
 
 // 1. The Data Model
 data class ChatUser(
     val name: String,
     val message: String,
     val time: String,
-    val imageRes: Int // Pass R.drawable.your_image OR R.color.your_color
+    val avatarRes: Int // Matches the data in SocialActivity
 )
 
 // 2. The Adapter Class
 class ChatAdapter(private val userList: List<ChatUser>) : RecyclerView.Adapter<ChatAdapter.ChatViewHolder>() {
 
     class ChatViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvName: TextView = view.findViewById(R.id.tvUserName)
-        val tvMessage: TextView = view.findViewById(R.id.tvLastMessage)
+        // CORRECTED IDs to match 'item_chat_user.xml'
+        val tvName: TextView = view.findViewById(R.id.tvName)
+        val tvMessage: TextView = view.findViewById(R.id.tvMessage)
         val tvTime: TextView = view.findViewById(R.id.tvTime)
-        val imgProfile: ShapeableImageView = view.findViewById(R.id.imgUserAvatar)
-
-        // Null safety checks (?) in case you are using an older XML layout
-        val viewOnlineStatus: View? = view.findViewById(R.id.viewOnlineStatus)
-        val tvUnreadCount: TextView? = view.findViewById(R.id.tvUnreadCount)
+        val imgProfile: ImageView = view.findViewById(R.id.imgAvatar)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
+        // CORRECTED LAYOUT: using 'item_chat_user'
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_chat_beautiful, parent, false)
+            .inflate(R.layout.item_chat_user, parent, false)
         return ChatViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
         val user = userList[position]
 
-        // --- ASSIGN TEXT DATA ---
+        // --- ASSIGN DATA ---
         holder.tvName.text = user.name
         holder.tvMessage.text = user.message
         holder.tvTime.text = user.time
+        holder.imgProfile.setImageResource(user.avatarRes)
 
-        // --- CRITICAL FIX FOR IMAGES ---
-        // Use setImageResource() to make real images appear correctly.
-        // setBackgroundResource() is only for colors or shapes.
-        holder.imgProfile.setImageResource(user.imageRes)
+        // --- NAVIGATION LOGIC (Added) ---
+        holder.itemView.setOnClickListener {
+            // This handles the click to "Navigate" to a chat
+            Toast.makeText(holder.itemView.context, "Opening chat with ${user.name}...", Toast.LENGTH_SHORT).show()
 
-        // --- REALISTIC LOGIC (Online/Unread) ---
-        // This forces the first 2 users (index 0 and 1) to look "Online"
+            // TODO: In the future, you will uncomment this to open the real chat screen:
+            // val intent = Intent(holder.itemView.context, ChatDetailActivity::class.java)
+            // intent.putExtra("USER_NAME", user.name)
+            // holder.itemView.context.startActivity(intent)
+        }
+
+        // --- STYLING LOGIC (Online/Unread) ---
+        // I adapted your logic to work with the standard IDs
         if (position <= 1) {
-            holder.viewOnlineStatus?.visibility = View.VISIBLE
-            holder.tvUnreadCount?.visibility = View.VISIBLE
-            holder.tvUnreadCount?.text = "2"
-            holder.tvTime.setTextColor(Color.parseColor("#B4F656")) // Neon Green
+            // Simulating "Online" / "New Message" style
+            holder.tvTime.setTextColor(Color.parseColor("#B4F656")) // Green text for time
+            holder.tvName.setTextColor(Color.BLACK)                 // Dark text for name
+            // Note: Since item_chat_user.xml might not have 'tvUnreadCount', we skip it to prevent crashes
         } else {
-            holder.viewOnlineStatus?.visibility = View.GONE
-            holder.tvUnreadCount?.visibility = View.GONE
-            holder.tvTime.setTextColor(Color.parseColor("#666666")) // Grey
+            // Standard style
+            holder.tvTime.setTextColor(Color.parseColor("#666666")) // Grey text
+            holder.tvName.setTextColor(Color.DKGRAY)
         }
     }
 

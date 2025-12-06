@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,10 +18,21 @@ class TrainingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_training)
 
+        setupHeader() // <--- Initialize Notification Bell Logic
         setupCategories()
         setupWorkouts()
         setupSuggestedVideos()
         setupBottomNavigation()
+    }
+
+    // --- NEW: Header Logic (Notification Bell) ---
+    private fun setupHeader() {
+        val notifButton = findViewById<ImageView>(R.id.notification_button)
+        // Use safe call in case ID is missing in other layouts (though we just added it to XML)
+        notifButton?.setOnClickListener {
+            val intent = Intent(this, NotificationActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     // --- 1. CATEGORIES LOGIC ---
@@ -72,16 +82,20 @@ class TrainingActivity : AppCompatActivity() {
                 R.id.navigation_home -> {
                     startActivity(Intent(this, HomeActivity::class.java))
                     overridePendingTransition(0, 0)
+                    finish() // Close TrainingActivity so Home reloads
                     true
                 }
                 R.id.navigation_community -> {
                     startActivity(Intent(this, SocialActivity::class.java))
                     overridePendingTransition(0, 0)
+                    finish()
                     true
                 }
                 R.id.navigation_training -> true // Stay here
                 R.id.navigation_profile -> {
-                    Toast.makeText(this, "Profile Coming Soon", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, ProfileActivity::class.java))
+                    overridePendingTransition(0, 0)
+                    finish()
                     true
                 }
                 else -> false
@@ -112,13 +126,11 @@ class TrainingActivity : AppCompatActivity() {
     // Workout Adapter (Vertical List)
     class WorkoutAdapter(private val list: List<WorkoutModel>) : RecyclerView.Adapter<WorkoutAdapter.Holder>() {
         class Holder(v: View) : RecyclerView.ViewHolder(v) {
-            val name: TextView = v.findViewById(R.id.tvWorkoutTitle) // Using ID from item_workout_pro.xml
+            val name: TextView = v.findViewById(R.id.tvWorkoutTitle)
             val meta: TextView = v.findViewById(R.id.tvWorkoutLevel)
             val duration: TextView = v.findViewById(R.id.tvDuration)
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-            // Make sure you created 'item_workout_pro.xml' from previous steps!
-            // If not, change this to R.layout.item_workout_large
             val v = LayoutInflater.from(parent.context).inflate(R.layout.item_workout_pro, parent, false)
             return Holder(v)
         }
@@ -143,7 +155,6 @@ class TrainingActivity : AppCompatActivity() {
             val title: TextView = v.findViewById(R.id.tvVideoTitle)
         }
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-            // Make sure you created 'item_video_card.xml'
             val v = LayoutInflater.from(parent.context).inflate(R.layout.item_video_card, parent, false)
             return Holder(v)
         }

@@ -29,7 +29,7 @@ class TargetBodyActivity : AppCompatActivity() {
         "36-45%"
     )
 
-    // --- NEW: Motivational Quotes for each level ---
+    // Motivational Quotes for each level
     private val bodyQuotes = listOf(
         "The Elite Look: Maximum definition and discipline.",
         "The Athletic Look: Powerful, toned, and ready for anything.",
@@ -38,15 +38,19 @@ class TargetBodyActivity : AppCompatActivity() {
         "The Foundation: Your journey to a new you begins here."
     )
 
+    // Variable to hold the gender
+    private var userGender: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.target_body)
 
+        // 1. Retrieve Gender from the previous activity
+        userGender = intent.getStringExtra("USER_GENDER")
+
         val viewPager = findViewById<ViewPager2>(R.id.target_body_viewpager)
         val slider = findViewById<Slider>(R.id.body_type_slider)
         val fatValue = findViewById<TextView>(R.id.body_fat_value)
-
-        // --- NEW: Find the quote TextView ---
         val quoteText = findViewById<TextView>(R.id.body_quote_text)
 
         val backButton = findViewById<MaterialButton>(R.id.back_button)
@@ -79,7 +83,7 @@ class TargetBodyActivity : AppCompatActivity() {
 
         // Set Initial Values
         fatValue.text = fatPercentages[0]
-        quoteText.text = bodyQuotes[0] // Set initial quote
+        quoteText.text = bodyQuotes[0]
 
         // Slider → ViewPager sync
         slider.addOnChangeListener { _, value, _ ->
@@ -106,10 +110,19 @@ class TargetBodyActivity : AppCompatActivity() {
         // Back button
         backButton.setOnClickListener { onBackPressed() }
 
-        // Next button → Redirect to TargetBodyActivity
+        // 2. UPDATED Navigation Logic
         nextButton.setOnClickListener {
-            val intent = Intent(this, FocusAreaActivity::class.java)
-            startActivity(intent)
+            if (userGender == "Female") {
+                // Go to Female Specific Focus Area
+                val intent = Intent(this, FemaleFocusAreaActivity::class.java)
+                intent.putExtra("USER_GENDER", userGender)
+                startActivity(intent)
+            } else {
+                // Go to Standard (Male) Focus Area
+                val intent = Intent(this, FocusAreaActivity::class.java)
+                intent.putExtra("USER_GENDER", userGender)
+                startActivity(intent)
+            }
         }
     }
 }

@@ -1,12 +1,18 @@
 package com.example.fitx
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -16,7 +22,10 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile) // Ensure your XML file is named activity_profile.xml
+        setContentView(R.layout.activity_profile) // Ensure XML is named activity_profile.xml
+
+        // Initialize Notification Channel to ensure notifications work
+        NotificationHelper.createNotificationChannel(this)
 
         setupUserInfo()
         setupButtons()
@@ -24,27 +33,42 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupUserInfo() {
-        // Example: You could load these from SharedPreferences or a Database
         val tvName = findViewById<TextView>(R.id.tvUserName)
         val tvEmail = findViewById<TextView>(R.id.tvUserEmail)
 
-        // tvName.text = "Alex Johnson" // Already set in XML, but this is how you'd update it dynamically
+        // Optional: Load saved gender if you want to display it
+        val sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val savedGender = sharedPref.getString("SAVED_GENDER", "Male")
     }
 
     private fun setupButtons() {
+        // --- NEW: Handle Notification Bell Click ---
+        // Using safe call (?.) in case the ID is missing in the profile layout
+        findViewById<ImageView>(R.id.notification_button)?.setOnClickListener {
+            val intent = Intent(this, NotificationActivity::class.java)
+            startActivity(intent)
+        }
+
         // 1. Edit Profile Button
         findViewById<MaterialButton>(R.id.btnEditProfile).setOnClickListener {
             Toast.makeText(this, "Edit Profile clicked", Toast.LENGTH_SHORT).show()
-            // val intent = Intent(this, EditProfileActivity::class.java)
-            // startActivity(intent)
         }
 
-        // 2. Notification Switch
+        // 2. Notification Switch with Permission Logic
         val notifSwitch = findViewById<SwitchMaterial>(R.id.swNotifications)
-
         notifSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                Toast.makeText(this, "Notifications Enabled", Toast.LENGTH_SHORT).show()
+                // Check permissions for Android 13+ (TIRAMISU)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
+                    } else {
+                        NotificationHelper.showNotification(this, "Notifications Enabled", "You will now receive daily workout reminders!")
+                    }
+                } else {
+                    // Android 12 or lower
+                    NotificationHelper.showNotification(this, "Notifications Enabled", "You will now receive daily workout reminders!")
+                }
             } else {
                 Toast.makeText(this, "Notifications Disabled", Toast.LENGTH_SHORT).show()
             }
@@ -62,26 +86,25 @@ class ProfileActivity : AppCompatActivity() {
 
         // 5. FAB (Floating Action Button)
         findViewById<FloatingActionButton>(R.id.fabEdit).setOnClickListener {
-            Toast.makeText(this, "Notifications / Quick Action", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Quick Action", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun performLogout() {
         Toast.makeText(this, "Logging Out...", Toast.LENGTH_SHORT).show()
 
-        // Logic to clear user session would go here
-
-        // Redirect to Login Screen
-        // val intent = Intent(this, LoginActivity::class.java)
-        // intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        // startActivity(intent)
-        // finish()
+        // Redirect to Login Screen and clear stack
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
+    // --- NAVIGATION LOGIC ---
     private fun setupBottomNavigation() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
 
-        // Highlight the "Profile" item
+        // Highlight "Profile"
         bottomNav.selectedItemId = R.id.navigation_profile
 
         bottomNav.setOnItemSelectedListener { item ->
@@ -90,7 +113,7 @@ class ProfileActivity : AppCompatActivity() {
                 R.id.navigation_home -> {
                     startActivity(Intent(this, HomeActivity::class.java))
                     overridePendingTransition(0, 0)
-                    finish()
+                    finish() // Close Profile
                     true
                 }
 
@@ -98,7 +121,7 @@ class ProfileActivity : AppCompatActivity() {
                 R.id.navigation_training -> {
                     startActivity(Intent(this, TrainingActivity::class.java))
                     overridePendingTransition(0, 0)
-                    finish()
+                    finish() // Close Profile
                     true
                 }
 
@@ -106,7 +129,7 @@ class ProfileActivity : AppCompatActivity() {
                 R.id.navigation_community -> {
                     startActivity(Intent(this, SocialActivity::class.java))
                     overridePendingTransition(0, 0)
-                    finish()
+                    finish() // Close Profile
                     true
                 }
 

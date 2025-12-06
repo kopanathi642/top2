@@ -29,7 +29,7 @@ class CurrentBodyActivity : AppCompatActivity() {
         "36-45%"
     )
 
-    // --- NEW: Quotes for Current Body (Starting Point) ---
+    // Quotes for Current Body
     private val currentBodyQuotes = listOf(
         "Lean Build: A great foundation for adding muscle.",
         "Athletic Build: You are already ahead of the game.",
@@ -38,15 +38,19 @@ class CurrentBodyActivity : AppCompatActivity() {
         "Heavy Build: The start of your most powerful journey."
     )
 
+    // Variable to hold the gender passed from GoalSelection
+    private var userGender: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.current_body)
 
+        // 1. CRITICAL: Retrieve Gender from previous activity
+        userGender = intent.getStringExtra("USER_GENDER")
+
         val viewPager = findViewById<ViewPager2>(R.id.body_image_viewpager)
         val slider = findViewById<Slider>(R.id.body_type_slider)
         val fatValue = findViewById<TextView>(R.id.body_fat_value)
-
-        // --- NEW: Find the Quote TextView ---
         val quoteText = findViewById<TextView>(R.id.body_quote_text)
 
         val backButton = findViewById<MaterialButton>(R.id.back_button)
@@ -106,9 +110,10 @@ class CurrentBodyActivity : AppCompatActivity() {
         // Back button
         backButton.setOnClickListener { onBackPressed() }
 
-        // Next button → Redirect to TargetBodyActivity
+        // 2. CRITICAL: Pass Gender to the next activity (TargetBodyActivity)
         nextButton.setOnClickListener {
             val intent = Intent(this, TargetBodyActivity::class.java)
+            intent.putExtra("USER_GENDER", userGender) // Pass it forward
             startActivity(intent)
         }
     }

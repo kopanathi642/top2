@@ -3,6 +3,7 @@ package com.example.fitx
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView // Added Import
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,19 +17,28 @@ class SocialActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_inbox_modern) // Your specific layout file
+        setContentView(R.layout.activity_inbox_modern) // Ensure layout is named activity_inbox_modern.xml
 
+        setupHeader() // <--- NEW: Initialize Notification Bell logic
         setupFakeData()
         setupTabsLogic()
         setupBottomNavigation()
         setupFab()
     }
 
-    private fun setupFakeData() {
-        // --- PART 1: CHATS (You already had this) ---
-        // Note: I changed colors to 'R.drawable.ic_launcher_background'
-        // so they act like real images. You can change back to colors if you prefer.
+    // --- NEW: Handle Notification Button Click ---
+    private fun setupHeader() {
+        // Use safe call (?.) just in case the ID is missing in this specific XML
+        val notifButton = findViewById<ImageView>(R.id.notification_button)
 
+        notifButton?.setOnClickListener {
+            val intent = Intent(this, NotificationActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun setupFakeData() {
+        // --- PART 1: CHATS ---
         val activeUsers = listOf(
             ChatUser("Sarah", "Online", "", R.drawable.ic_launcher_background),
             ChatUser("Mike", "Online", "", R.drawable.ic_launcher_background),
@@ -41,26 +51,26 @@ class SocialActivity : AppCompatActivity() {
             ChatUser("Yoga Instructor", "Don't forget to stretch.", "1h", R.drawable.ic_launcher_background)
         )
 
+        // Setup Active Users (Horizontal List)
         val recyclerActive = findViewById<RecyclerView>(R.id.recyclerActive)
         recyclerActive.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerActive.adapter = ChatAdapter(activeUsers)
 
+        // Setup Recent Chats (Vertical List)
         val recyclerChats = findViewById<RecyclerView>(R.id.recyclerChats)
         recyclerChats.layoutManager = LinearLayoutManager(this)
         recyclerChats.adapter = ChatAdapter(chatUsers)
 
 
-        // --- PART 2: POSTS (THIS WAS MISSING!) ---
-        // This is the code required to make the "Community Feed" work.
-
+        // --- PART 2: POSTS ---
         val posts = listOf(
             PostModel(
                 "Sarah Fitness",
                 "2 hours ago",
                 "Just crushed my leg day workout! Hit a new PR on squats. 100kg for 5 reps! 💪 #LegDay",
                 "124", "22",
-                R.drawable.ic_launcher_background, // Profile Pic
-                R.drawable.ic_launcher_background  // Post Image
+                R.drawable.ic_launcher_background,
+                R.drawable.ic_launcher_background
             ),
             PostModel(
                 "Mike The Trainer",
@@ -68,7 +78,7 @@ class SocialActivity : AppCompatActivity() {
                 "Remember: Consistency is key. You don't have to be extreme, just consistent.",
                 "85", "10",
                 R.drawable.ic_launcher_background,
-                null // This post has NO image (null)
+                null
             ),
             PostModel(
                 "Healthy Foodie",
@@ -80,7 +90,6 @@ class SocialActivity : AppCompatActivity() {
             )
         )
 
-        // Connect the Adapter to the RecyclerView
         val recyclerPosts = findViewById<RecyclerView>(R.id.recyclerPosts)
         recyclerPosts.layoutManager = LinearLayoutManager(this)
         recyclerPosts.adapter = PostAdapter(posts)
@@ -109,6 +118,7 @@ class SocialActivity : AppCompatActivity() {
         })
     }
 
+    // --- NAVIGATION LOGIC ---
     private fun setupBottomNavigation() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
         bottomNav.selectedItemId = R.id.navigation_community
@@ -118,15 +128,20 @@ class SocialActivity : AppCompatActivity() {
                 R.id.navigation_home -> {
                     startActivity(Intent(this, HomeActivity::class.java))
                     overridePendingTransition(0, 0)
+                    finish() // Close SocialActivity
                     true
                 }
-                R.id.navigation_community -> true
                 R.id.navigation_training -> {
-                    Toast.makeText(this, "Training", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, TrainingActivity::class.java))
+                    overridePendingTransition(0, 0)
+                    finish() // Close SocialActivity
                     true
                 }
+                R.id.navigation_community -> true // Stay here
                 R.id.navigation_profile -> {
-                    Toast.makeText(this, "Profile", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, ProfileActivity::class.java))
+                    overridePendingTransition(0, 0)
+                    finish() // Close SocialActivity
                     true
                 }
                 else -> false

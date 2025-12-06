@@ -14,11 +14,15 @@ class FitnessLevelActivity : AppCompatActivity() {
 
     private var selectedLevel: String? = null
 
+    // Variable to store the gender
+    private var userGender: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.fitness_level) // Make sure XML is named fitness_level.xml
 
-        // Make sure your XML file is named fitness_level.xml
-        setContentView(R.layout.fitness_level)
+        // 1. Retrieve Gender from previous activity (MotivationsActivity)
+        userGender = intent.getStringExtra("USER_GENDER")
 
         // Cards
         val cardBeginner = findViewById<MaterialCardView>(R.id.cardBeginner)
@@ -50,7 +54,13 @@ class FitnessLevelActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please select your fitness level", Toast.LENGTH_SHORT).show()
             } else {
                 val intent = Intent(this, HomeActivity::class.java)
+
+                // Pass Fitness Level
                 intent.putExtra("FITNESS_LEVEL", selectedLevel)
+
+                // 2. Pass Gender to HomeActivity (Critical for character image)
+                intent.putExtra("USER_GENDER", userGender)
+
                 startActivity(intent)
             }
         }

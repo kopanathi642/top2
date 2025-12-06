@@ -1,5 +1,6 @@
 package com.example.fitx
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
@@ -9,22 +10,52 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.card.MaterialCardView
 
+// --- EXPLICIT IMPORTS ADDED TO FIX "UNRESOLVED REFERENCE" ---
+import com.example.fitx.TrainingActivity
+import com.example.fitx.SocialActivity
+import com.example.fitx.ProfileActivity
+import com.example.fitx.NotificationActivity
+
 class HomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dashboard) // Ensure XML is named 'dashboard.xml'
 
-        setupCharacterImage()
+        // 1. Handle Gender Logic (Save & Load)
+        handleGenderPersistence()
+
         setupDashboardMetrics()
         setupHeaderInteractions()
         setupBottomNavigation()
     }
 
-    private fun setupCharacterImage() {
+    private fun handleGenderPersistence() {
         val characterImageView = findViewById<ImageView>(R.id.character_video)
-        // Ensure you have your fox image in 'res/drawable'
-        characterImageView.setImageResource(R.drawable.male_character)
+
+        // Access the phone's local storage
+        val sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+
+        // 1. Try to get gender from the Intent (Fresh login/setup)
+        var currentGender = intent.getStringExtra("USER_GENDER")
+
+        if (currentGender != null) {
+            // If we received a gender, SAVE it for later
+            val editor = sharedPref.edit()
+            editor.putString("SAVED_GENDER", currentGender)
+            editor.apply()
+        } else {
+            // If Intent is null (Coming back from Training/Profile), LOAD saved gender
+            currentGender = sharedPref.getString("SAVED_GENDER", "Male")
+        }
+
+        // 2. Set the Image based on the final determined gender
+        if (currentGender == "Female") {
+            // Ensure R.drawable.your_female_character exists!
+            characterImageView.setImageResource(R.drawable.your_female_character)
+        } else {
+            characterImageView.setImageResource(R.drawable.male_character)
+        }
     }
 
     private fun setupDashboardMetrics() {
@@ -47,8 +78,10 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setupHeaderInteractions() {
+        // --- UPDATED: Open Notification Screen ---
         findViewById<ImageView>(R.id.notification_button).setOnClickListener {
-            Toast.makeText(this, "No new notifications", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, NotificationActivity::class.java)
+            startActivity(intent)
         }
 
         findViewById<ImageView>(R.id.streak_icon).setOnClickListener {
@@ -64,30 +97,30 @@ class HomeActivity : AppCompatActivity() {
 
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                // 1. HOME (Already here)
+                // 1. HOME (Stay here)
                 R.id.navigation_home -> true
 
                 // 2. TRAINING
                 R.id.navigation_training -> {
-                    val intent = Intent(this, TrainingActivity::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, TrainingActivity::class.java))
                     overridePendingTransition(0, 0)
+                    finish() // Close Home
                     true
                 }
 
                 // 3. COMMUNITY
                 R.id.navigation_community -> {
-                    val intent = Intent(this, SocialActivity::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, SocialActivity::class.java))
                     overridePendingTransition(0, 0)
+                    finish()
                     true
                 }
 
-                // 4. PROFILE (UPDATED: Now opens ProfileActivity)
+                // 4. PROFILE
                 R.id.navigation_profile -> {
-                    val intent = Intent(this, ProfileActivity::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, ProfileActivity::class.java))
                     overridePendingTransition(0, 0)
+                    finish()
                     true
                 }
                 else -> false
