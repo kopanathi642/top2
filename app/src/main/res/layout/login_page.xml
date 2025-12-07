@@ -1,222 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login_background"
-    android:padding="20dp"
-    android:orientation="vertical"
-    android:gravity="center_horizontal">
+    android:fillViewport="true">
 
-    <!-- Welcome Back -->
-    <TextView
-        android:id="@+id/tvWelcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Welcome To Fit X"
-        android:textColor="#FFFFFF"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:layout_marginTop="15dp"/>
-
-    <!-- Profile / App Logo -->
-    <ImageView
-        android:id="@+id/ivLogo"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
-        android:src="@drawable/app_logo"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/circle_background"
-        android:scaleType="centerCrop"/>
-
-    <!-- Subtitle -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Achieve Your Fitness Goals"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginTop="25dp"/>
-
-    <!-- Email Input -->
-    <EditText
-        android:id="@+id/etEmail"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="25dp"
-        android:background="@drawable/edittext_bg"
-        android:drawableLeft="@drawable/baseline_person_24"
-        android:drawablePadding="8dp"
-        android:hint="User name"
-        android:padding="8dp"
-        android:textColor="@android:color/white"
-        android:textColorHint="#B3FFFFFF"
-        android:imeOptions="flagNoPersonalizedLearning" />
-
-    <!-- Password Input -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="15dp"
-        android:orientation="horizontal"
-        android:background="@drawable/edittext_bg"
-        android:gravity="center_vertical"
-        android:paddingStart="10dp"
-        android:paddingEnd="1dp">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome To Fit X"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"/>
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_lock"
-            android:tint="@android:color/white"
-            android:layout_marginEnd="8dp" />
+            android:id="@+id/ivLogo"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:src="@drawable/app_logo"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/circle_background"
+            android:scaleType="centerCrop"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passwordInputLayout"
-            app:endIconMode="password_toggle"
-            app:endIconTint="@android:color/white"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:hint="Password"
-            android:theme="@style/ThemeOverlay.MaterialComponents.TextInputEditText">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Achieve Your Fitness Goals"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="25dp"/>
 
-            <com.google.android.material.textfield.TextInputEditText
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/edittext_bg"
+            android:drawableStart="@drawable/baseline_person_24"
+            android:drawablePadding="8dp"
+            android:hint="User name"
+            android:padding="8dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="#B3FFFFFF"
+            android:imeOptions="actionNext"
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:background="@drawable/edittext_bg"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_lock"
+                app:tint="@android:color/white"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
                 android:id="@+id/etPassword"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:background="@android:color/transparent"
+                android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="7dp"
                 android:textColor="@android:color/white"
                 android:textColorHint="#B3FFFFFF"
                 android:textSize="20sp"
-                android:imeOptions="flagNoPersonalizedLearning" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:maxLines="1"
+                android:imeOptions="actionDone" />
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/ivPasswordToggle"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_eye"
+                app:tint="@android:color/white"
+                android:clickable="true"
+                android:focusable="true"/>
 
-    <!-- Forgot Password -->
-    <TextView
-        android:id="@+id/tvForgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Forgot Password?"
-        android:textColor="#7D7DFF"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp"
-        android:layout_gravity="end"/>
+        </LinearLayout>
 
-    <!-- Login Button -->
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="Login"
-        android:textAllCaps="false"
-        android:backgroundTint="#063BB8"
-        android:textColor="@android:color/white"
-        android:textSize="23sp"
-        android:layout_marginTop="20dp"/>
+        <TextView
+            android:id="@+id/tvForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password?"
+            android:textColor="#7D7DFF"
+            android:textSize="16sp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="end"/>
 
-    <!-- OR Divider -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="or"
-        android:textColor="#AAAAAA"
-        android:textSize="14sp"
-        android:layout_marginTop="15dp"/>
-
-    <!-- Sign in with Google -->
-    <LinearLayout
-        android:id="@+id/btnGoogleSignIn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:background="@drawable/rounded_bg_gray"
-        android:layout_marginTop="15dp"
-        android:padding="10dp"
-        android:clickable="true"
-        android:focusable="true">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_google"
-            android:contentDescription="Google Login"/>
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="Login"
+            android:textAllCaps="false"
+            android:backgroundTint="#063BB8"
+            android:textColor="@android:color/white"
+            android:textSize="23sp"
+            android:layout_marginTop="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign in with Google"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:layout_marginStart="10dp"/>
-    </LinearLayout>
+            android:text="or"
+            android:textColor="#AAAAAA"
+            android:textSize="14sp"
+            android:layout_marginTop="15dp"/>
 
-    <!-- Sign in with Apple -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:background="@drawable/rounded_bg_gray"
-        android:layout_marginTop="15dp"
-        android:padding="10dp">
+        <LinearLayout
+            android:id="@+id/btnGoogleSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/rounded_bg_gray"
+            android:layout_marginTop="15dp"
+            android:padding="10dp"
+            android:clickable="true"
+            android:focusable="true">
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/apple"
-            android:contentDescription="Apple Login"/>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_google"
+                android:contentDescription="Google Login"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign in with Google"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/rounded_bg_gray"
+            android:layout_marginTop="15dp"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/gmail"
+                android:contentDescription="Email Login"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign in with Email"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign in with Apple"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:layout_marginStart="10dp"/>
+            android:text="Don't have an account? Sign Up"
+            android:textColor="#7D7DFF"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"/>
+
     </LinearLayout>
-
-
-    <!-- Sign in with Email -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:background="@drawable/rounded_bg_gray"
-        android:layout_marginTop="15dp"
-        android:padding="10dp">
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/gmail"
-            android:contentDescription="Email Login"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sign in with Email"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:layout_marginStart="10dp"/>
-    </LinearLayout>
-
-
-    <!-- Sign Up -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Don't have an account? Sign Up"
-        android:textColor="#7D7DFF"
-        android:textSize="16sp"
-        android:layout_marginTop="20dp"/>
-
-</LinearLayout>
+</ScrollView>
